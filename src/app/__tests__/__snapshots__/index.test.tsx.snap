@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> should render and match the snapshot 1`] = `
+<Routes>
+  <Route
+    element={<Memo />}
+    path="/projects/detail"
+  />
+  <Route
+    element={<Unknown />}
+    path="/"
+  />
+  <Route
+    element={<Unknown />}
+    path="*"
+  />
+</Routes>
+`;

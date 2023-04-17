@@ -1,0 +1,88 @@
+{
+  "Popup": {
+    "exchangedInput": "Your changes have not been saved. Do you still want to escape?",
+    "no": "No",
+    "yes": "Yes",
+    "recharge": "Recharge",
+    "titleConfirmRecharge": "Your wallet balance is not enough! Please make a deposit to continue making transactions.",
+    "transactionSuccess": "Successful transaction!",
+    "cancel": "Cancel"
+  },
+  "ProjectDetail": {
+    "title": "Information",
+    "btnResearch": "Find out more",
+    "notFound": "Data has not been updated"
+  },
+  "Stake": {
+    "other": "Other",
+    "APR": "Time - APR",
+    "research": "Amount you want to Stake",
+    "enterMoney": "Enter money",
+    "rateUSDT": "Rate USDT ",
+    "enterExchange": "Value displayed after conversion",
+    "profit": "Profit",
+    "amount": "Amount of USDT received:",
+    "afterTerm": "quantity after term:",
+    "profitTime": "Time to receive interest:",
+    "day": "Day",
+    "year": "year",
+    "nameProject": "Project",
+    "requireLargeOneOfNumber": "Limit value from",
+    "reinvestment": "Reinvestment",
+    "intoMoney": "Into Money",
+    "TradingTime": "Trading Time:",
+    "paymentConfirmation": "Payment confirmation",
+    "permanent": "Fixed Stake",
+    "notFoundStake": "No Stake packages available!"
+  },
+  "StakeManagement": {
+    "totalAssets": "Total staking assets",
+    "stakingBook": "Staking book:",
+    "closeBook": "Closing number:",
+    "increasedProfits": "Increase profits",
+    "modal": {
+      "text1": "The staking package is an accumulation product with a specific term depending on each package.",
+      "text2": "Customers stake 1 amount corresponding to the number of coins in the project, the profit the customer receives is an attractive number of coins in a short time while still ensuring the staked amount. Safe staking transaction, risk is approximately 0.",
+      "text3": "Customers can use the coins to play games, buy in-game items, resell for income, ...",
+      "label": "Terms and conditions of participation:",
+      "text4": "All Easy Invest accounts have been successfully registered.",
+      "text5": "Join from the date of the package release to the end of the program."
+    }
+  },
+  "Header": {
+    "Access": "Access",
+    "Sign In": "Sign In",
+    "Cancel": "Cancel",
+    "Log out": "Log out",
+    "Statistics": "Statistics",
+    "Stake Management": "Stake Management",
+    "Manage Wallet": "Manage Wallet",
+    "You are not granted access!": "You are not granted access!",
+    "Investor management": "Investor management",
+    "Transaction management": "Transaction management",
+    "Are you sure you want to sign out?": "Are you sure you want to sign out?"
+  },
+  "Login": {
+    "Send back!": "Send back!",
+    "Sign in with Telegram": "Sign in with Telegram",
+    "Sign in with OTP code": "Sign in with OTP code",
+    "Having trouble logging in?": "Having trouble logging in?",
+    "See the instructions": "See the instructions",
+    "Get OTP code": "Get OTP code",
+    "Enter your phone number": "Enter your phone number",
+    "Please enter your registered phone number": "Please enter your registered phone number",
+    "Please enter the OTP that was sent via your Telegram.": "Please enter the OTP that was sent via your Telegram.",
+    "OTP code is valid for": "OTP code is valid for",
+    "The OTP has expired.": "The OTP has expired.",
+    "OTP code is incorrect": "OTP code is incorrect",
+    "Incorrect phone number": "Incorrect phone number"
+  },
+  "Home": {
+    "All": "Tất cả",
+    "Blocked": "Đã khóa",
+    "Operating": "Đang hoạt động",
+    "Add project": "Thêm dự án",
+    "Preview": "Info",
+    "Invest": "Invest"
+  }
+}

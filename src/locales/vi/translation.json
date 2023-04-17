@@ -1,0 +1,99 @@
+{
+  "Header": {
+    "Sign In": "Đăng nhập",
+    "Cancel": "Hủy bỏ",
+    "Log out": "Đăng xuất",
+    "Stake Management": "Quản lý Stake",
+    "Manage Wallet": "Quản lý ví",
+    "You are not granted access!": "Bạn không được cấp quyền truy cập!",
+    "Are you sure you want to sign out?": "Bạn chắc chắn muốn đăng xuất không?"
+  },
+  "Home": {
+    "All": "Tất cả",
+    "Blocked": "Đã khóa",
+    "Operating": "Đang hoạt động",
+    "Add project": "Thêm dự án",
+    "Preview": "Thông tin",
+    "Invest": "Đầu tư"
+  },
+  "Login": {
+    "Send back!": "Gửi lại!",
+    "Sign in with Telegram": "Đăng nhập bằng Telegram",
+    "Sign in with OTP code": "Đăng nhập bằng mã OTP",
+    "Having trouble logging in?": "Bạn gặp khó khăn khi đăng nhập?",
+    "See the instructions": "Xem hướng dẫn",
+    "Get OTP code": "Nhận mã OTP",
+    "Enter your phone number": "Nhập số điện thoại",
+    "Please enter your registered phone number": "Vui lòng nhập số điện thoại đã được đăng ký",
+    "Please enter the OTP that was sent via your Telegram.": "Vui lòng nhập mã OTP đã được gửi qua Telegram của bạn.",
+    "OTP code is valid for": "Mã OTP có hiệu lực trong",
+    "The OTP has expired.": "Mã OTP hết hiệu lực.",
+    "OTP code is incorrect": "Mã OTP không đúng",
+    "Incorrect phone number": "Số điện thoại không đúng"
+  },
+  "FormProject": {
+    "Add Project": "Thêm dự án",
+    "Language": "Ngôn ngữ",
+    "Vietnamese": "Tiếng việt",
+    "English": "Tiếng anh",
+    "Name of project": "Tên dự án",
+    "Enter project name": "Nhập tên dự án",
+    "Publisher": "Nhà phát hành",
+    "Enter publisher name": "Nhập tên đơn vị phát hành",
+    "Banner": "Ảnh bìa",
+    "Avatar": "Ảnh Avatar",
+    "Description": "Mô tả",
+    "Website": "Website",
+    "Enter website link": "Nhập link website"
+  },
+  "Popup": {
+    "exchangedInput": "Những thay đổi của bạn chưa được lưu. Bạn vẫn muốn thoát?",
+    "no": "Không",
+    "yes": "Có",
+    "recharge": "Nạp tiền",
+    "titleConfirmRecharge": "Số dư ví của bạn không đủ! Vui lòng nạp tiền để tiếp tục thực hiện giao dịch.",
+    "transactionSuccess": "Giao dịch thành công!",
+    "cancel": "Hủy bỏ"
+  },
+  "ProjectDetail": {
+    "title": "Thông tin",
+    "btnResearch": "Tìm hiểu thêm",
+    "notFound": "Dữ liệu chưa được cập nhật"
+  },
+  "Stake": {
+    "other": "Khác",
+    "APR": "Thời hạn - APR",
+    "research": "Số tiền bạn muốn Stake",
+    "enterMoney": "Nhập số tiền",
+    "rateUSDT": "Tỷ giá USDT ",
+    "enterExchange": "Giá trị hiển thị sau quy đổi",
+    "profit": "Lợi nhuận",
+    "amount": "Số lượng USDT nhận:",
+    "afterTerm": "Số lượng sau kỳ hạn:",
+    "profitTime": "Thời điểm nhận lãi:",
+    "day": "Ngày",
+    "year": "năm",
+    "nameProject": "Dự án",
+    "requireLargeOneOfNumber": "Giá trị giới hạn từ",
+    "reinvestment": "Tái đầu tư",
+    "intoMoney": "Thành tiền",
+    "TradingTime": "Thời gian giao dịch:",
+    "paymentConfirmation": "Xác nhận thanh toán",
+    "permanent": "Stake lãi xuất cố định",
+    "notFoundStake": "Chưa có gói Stake nào có sẵn!"
+  },
+  "StakeManagement": {
+    "totalAssets": "Tổng tài sản staking",
+    "stakingBook": "Sổ staking:",
+    "closeBook": "Số đóng:",
+    "increasedProfits": "Lợi nhuận gia tăng:",
+    "modal": {
+      "text1": "Gói staking là sản phẩm tích lũy có thời hạn cụ thể phụ thuộc vào từng gói. ",
+      "text2": "Khách hàng stake 1 số tiền tương ứng với số xu trong dự án, lợi nhuận khách hàng nhận được là số lượng xu hấp dẫn trong thời gian ngắn mà vẫn đảm bảo số tiền đã stake. Giao dịch staking an toàn, rủi ro xấp sỉ 0.",
+      "text3": "Khách hàng có thể sử dụng số xu để chơi game, mua vật phẩm trong game, bán lại kiếm thu nhập, ...",
+      "label": "Điều kiện và thời hạn tham gia:",
+      "text4": "Tất cả tài khoản Easy Invest đã đăng ký thành công.",
+      "text5": "Tham gia từ ngày phát hành gói đến khi kết thúc chương trình."
+    }
+  }
+}
