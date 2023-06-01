@@ -32,6 +32,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MantineProvider } from '@mantine/core';
 import Directional from 'app/components/Directional/Directional';
+import { Notifications } from '@mantine/notifications';
+
+import 'styles/font.css';
+import { ErrorBoundary } from 'shared/ErrorBoudary';
 
 const client = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -45,7 +49,10 @@ root.render(
           <MantineProvider withGlobalStyles withNormalizeCSS>
             <BrowserRouter>
               <Directional />
-              <App />
+              <ErrorBoundary>
+                <App />
+                <Notifications position="bottom-right" bottom={64} />
+              </ErrorBoundary>
               <GlobalStyle />
             </BrowserRouter>
           </MantineProvider>

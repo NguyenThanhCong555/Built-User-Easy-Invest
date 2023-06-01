@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Box, Center, createStyles, Divider, Flex, Image, Stack, Text } from '@mantine/core';
+import { Avatar, Box, Center, createStyles, Divider, Flex, Image, Stack, Text } from '@mantine/core';
 import { primary, variable } from 'styles/variable';
 
 import { ReactComponent as CoinUSDT } from 'assets/icons/coin/usdt.svg';
@@ -20,32 +20,6 @@ interface HistoryTransactionItemProps {
 const HistoryTransactionItem = ({ data, id }: HistoryTransactionItemProps) => {
   const { classes } = makeStyles();
 
-  const convertTitleTransaction = useCallback(
-    (service: string): string => {
-      switch (service) {
-        case EResponseTransactions.Stake:
-          if (data?.balance < 0) {
-            return 'Thanh toán gói Staking';
-          } else {
-            return 'Hoàn tất kỳ hạn Staking';
-          }
-        case EResponseTransactions.BuyMachine:
-          return 'Thanh toán Máy đào xu';
-        case EResponseTransactions.Recharge:
-          return 'Nạp tiền';
-        case EResponseTransactions.Receive:
-          return 'Nhận tiền từ ??';
-        case EResponseTransactions.Withdraw:
-          return 'Rút tiền';
-        case EResponseTransactions.Transfer:
-          return 'Chuyển tiền đến ??';
-        default:
-          return 'Giao dịch';
-      }
-    },
-    [data?.balance],
-  );
-
   const renderImageTransaction = useCallback((image: string, service: string): JSX.Element => {
     switch (service) {
       case EResponseTransactions.Recharge:
@@ -55,27 +29,26 @@ const HistoryTransactionItem = ({ data, id }: HistoryTransactionItemProps) => {
       case EResponseTransactions.Transfer:
         return <ConvertCard />;
       default:
-        return <Image src={image} className={classes.image} />;
+        return <Avatar src={image} />;
     }
   }, []);
-
   return (
     <Flex className={classes.flex}>
       <Box className={classes.box}>
         <Center className={classes.center}>
           <Flex sx={{ borderRadius: '60%', overflow: 'hidden' }} w={35} h={35}>
-            {renderImageTransaction('https://i.ibb.co/vD9YhtJ/Rectangle-56-5.png', data?.coin)}
+            {renderImageTransaction(data?.coin_avatar, data?.coin_id)}
           </Flex>
         </Center>
       </Box>
       <Stack className={classes.stack1}>
-        <Text className={classes.title}>Coin Name</Text>
+        <Text className={classes.title}>{data.coin_name}</Text>
       </Stack>
 
       <Stack className={classes.stack2}>
         <Flex className={classes.flexNumber}>
           <Text fz={16} fw={700} c={primary.primary2} mr={20}>
-            {formatCurrency(data?.balance || 1330)}
+            {formatCurrency(data?.balance)}
           </Text>
         </Flex>
       </Stack>

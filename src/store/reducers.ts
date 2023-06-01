@@ -10,6 +10,12 @@ import { projectReducer } from './slice/project';
 import { stakeReducer } from './slice/stake';
 import { coinReducer } from './slice/coin';
 import { walletReducer } from './slice/wallet';
+import { transactionReducer } from './slice/transaction';
+import { rechargeReducer } from './slice/recharge';
+import { systemReducer } from './slice/system';
+import { profileReducer } from './slice/profile';
+import { withdrawReducer } from './slice/withdraw';
+import { p2pReducer } from './slice/p2p';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -26,6 +32,12 @@ export function createReducer(injectedReducers: InjectedReducersType = {}) {
     auth: authReducer,
     coin: coinReducer,
     wallet: walletReducer,
+    transaction: transactionReducer,
+    recharge: rechargeReducer,
+    system: systemReducer,
+    profile: profileReducer,
+    withdraw: withdrawReducer,
+    p2p: p2pReducer,
   });
   return rootReducers;
 }

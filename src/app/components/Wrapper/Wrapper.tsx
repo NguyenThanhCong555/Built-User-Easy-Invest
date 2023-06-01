@@ -1,6 +1,6 @@
 import { Container, Stack, createStyles } from '@mantine/core';
 import React from 'react';
-import Header from '../Header/Header';
+import Header from '../Header';
 import { Outlet } from 'react-router-dom';
 import { media } from 'styles/media';
 

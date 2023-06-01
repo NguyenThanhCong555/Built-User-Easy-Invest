@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useInterval } from '@mantine/hooks';
 import { useTranslation } from 'react-i18next';
 import { Flex, Group, PinInput, Text, createStyles } from '@mantine/core';
@@ -7,6 +7,7 @@ import { Flex, Group, PinInput, Text, createStyles } from '@mantine/core';
 import { media } from 'styles/media';
 import { authActions } from 'store/slice/auth';
 import { SubtleButton } from 'app/components/Button/SubtleButton';
+import { selectAuth } from 'store/slice/auth/selectors';
 
 interface Props {
   phone?: string;
@@ -17,6 +18,7 @@ const OtpInput = memo(({ phone, onSendBack }: Props) => {
   // Local
   const { t } = useTranslation();
   const { cx, classes } = makeStyles();
+  const { login } = useSelector(selectAuth);
   // State
   const [seconds, setSeconds] = useState<number>(60);
   const [otp, setOtp] = useState<string>('');
@@ -67,17 +69,21 @@ const OtpInput = memo(({ phone, onSendBack }: Props) => {
           onChange={setOtp}
           onComplete={handleCompleteOtpInput}
         />
-        {seconds !== 0 ? (
-          <Text className={cx('small_3-regular', classes.validOtp)}>
-            {t('Login.OTP code is valid for')} {seconds}s
-          </Text>
-        ) : (
+        {login.error === 10 || seconds === 0 ? (
           <Flex className={cx('small_3-regular', classes.validOtp)}>
             <Text>{t('Login.The OTP has expired.')}</Text>{' '}
             <SubtleButton className={classes.sendBtn} onClick={() => handleSendBack()}>
               {t('Login.Send back!')}
             </SubtleButton>
           </Flex>
+        ) : login.error === 12 ? (
+          <Text className={cx('small_3-regular', classes.red, classes.validOtp)}>{t('Login.OTP code is incorrect')}</Text>
+        ) : seconds !== 0 ? (
+          <Text className={cx('small_3-regular', classes.validOtp)}>
+            {t('Login.OTP code is valid for')} {seconds}s
+          </Text>
+        ) : (
+          <></>
         )}
       </Group>
     </div>
@@ -127,5 +133,8 @@ const makeStyles = createStyles(() => ({
     color: 'var(--primary-2)',
     textDecoration: 'underline',
     cursor: 'pointer',
+  },
+  red: {
+    color: '#F20000',
   },
 }));

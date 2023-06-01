@@ -2,11 +2,16 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { store } from 'store/configureStore';
 import { authActions } from 'store/slice/auth';
 import { coinActions } from 'store/slice/coin';
+import { systemActions } from 'store/slice/system';
 import { stakeActions } from 'store/slice/stake';
 import { walletActions } from 'store/slice/wallet';
 
 // import Storage from 'utils/Storage';
 import { BaseResponse } from 'utils/http/response';
+import { profileActions } from 'store/slice/profile';
+import { transactionActions } from 'store/slice/transaction';
+import { p2pActions } from 'store/slice/p2p';
+import { rechargeActions } from 'store/slice/recharge';
 
 const BASEURL = 'https://ttvnapi.com';
 
@@ -44,7 +49,13 @@ authAxios.interceptors.request.use(
 // Add a response interceptor
 authAxios.interceptors.response.use(
   async (res: AxiosResponse) => {
-    return handleAuthorized(res);
+    try {
+      handleAuthorized(res);
+      handleSystemError(res);
+      return res;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   function (error: AxiosError) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
@@ -53,7 +64,7 @@ authAxios.interceptors.response.use(
   },
 );
 
-function handleAuthorized(res: AxiosResponse) {
+function handleAuthorized(res: AxiosResponse): AxiosResponse {
   const originalConfig = res.config;
   const originalData = res.data as BaseResponse;
   const RESPONSE_ERROR_AUTHORIZED = 2;
@@ -66,23 +77,32 @@ function handleAuthorized(res: AxiosResponse) {
     originalData.error === RESPONSE_ERROR_AUTHORIZED &&
     originalData.message === RESPONSE_MESSAGE_AUTHORIZED
   ) {
-    console.log('re-unauthorized');
     store.dispatch(authActions.logoutSuccess());
     store.dispatch(coinActions.resetAllFieldOfCoin());
     store.dispatch(stakeActions.resetAllFieldOfStake());
     store.dispatch(walletActions.resetAllFieldOfWallet());
-    // const origin = window.location.origin;
-    // localStorage.removeItem('persist:user');
+    store.dispatch(rechargeActions.resetAllFieldRecharge());
 
-    // setTimeout(() => {
-    //   // window.location.href = origin;
-    //   window.location.reload();
-    // }, 2000);
-
+    store.dispatch(profileActions.resetAllFieldOfProfile());
+    store.dispatch(transactionActions.resetAllFieldOfTransaction());
+    store.dispatch(p2pActions.resetAllFieldOfP2P());
     return res;
   }
   return res;
 }
+
+function handleSystemError(res: AxiosResponse): AxiosResponse {
+  const originalData = res.data as BaseResponse;
+  const RESPONSE_ERROR_SYSTEM_ERROR = 1;
+  const RESPONSE_MESSAGE_SYSTEM_ERROR = 'system_error';
+
+  if (originalData.error === RESPONSE_ERROR_SYSTEM_ERROR && originalData.message === RESPONSE_MESSAGE_SYSTEM_ERROR) {
+    store.dispatch(systemActions.setSystemError());
+    // throw new Error('system error');
+  }
+  return res;
+}
+
 // function fetchRetry(url, options = {}, retries = 3, backoff = 300) {
 //   /* 1 */
 //   const retryCodes = [408, 500, 502, 503, 504, 522, 524];

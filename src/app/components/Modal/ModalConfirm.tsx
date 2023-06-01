@@ -46,6 +46,10 @@ const makeStyles = createStyles(theme => ({
     fontWeight: 400,
     textAlign: 'center',
     color: '#000',
+
+    '@media (max-width: 768px)': {
+      fontSize: 16,
+    },
   },
   flex: {
     gap: 10,

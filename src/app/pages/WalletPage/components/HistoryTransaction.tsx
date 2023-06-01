@@ -2,13 +2,21 @@ import React from 'react';
 import { createStyles, Divider, Loader, Stack, Text } from '@mantine/core';
 import HistoryTransactionItem from './HistoryTransactionItem';
 import { variable } from 'styles/variable';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate } from 'react-router-dom';
 
-const HistoryTransaction = () => {
+export interface IpropsData {
+  data: any;
+}
+
+const HistoryTransaction = (props: IpropsData) => {
   const { classes } = makeStyles();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const resData = props?.data?.filter((value, index) => {
+    return value?.coin_name !== 'USDT';
+  });
 
   return (
     <Stack className={classes.stack}>
@@ -16,8 +24,8 @@ const HistoryTransaction = () => {
         {false ? (
           <Loader color={variable.primary.primary1} />
         ) : (
-          ['', '', '', '', '', ''].map((item, index) => (
-            <Stack onClick={() => navigate(`coin/`)} className={classes.stackItem} key={index}>
+          resData.map((item, index) => (
+            <Stack onClick={() => navigate(`coin/${item?.coin_id}`)} className={classes.stackItem} key={index}>
               <HistoryTransactionItem data={item} id={index} />
             </Stack>
           ))

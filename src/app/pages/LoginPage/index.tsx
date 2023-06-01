@@ -10,6 +10,8 @@ import { LoginLayout } from './components/Layout/LoginLayout';
 import Languages from './components/Languages/Languages';
 import { useDispatch } from 'react-redux';
 import { authActions } from 'store/slice/auth';
+import { apiGet, apiGetV2 } from 'utils/http/request';
+import { AxiosResponse } from 'axios';
 
 export const LoginPage = () => {
   const dispatch = useDispatch();
@@ -19,13 +21,20 @@ export const LoginPage = () => {
   const { classes } = makeStyles();
   const mobile = useMediaQuery('(max-width: 768px)');
   // Function
-  const handleLoginByOtp = () => {
-    dispatch(authActions.requestLoginByTelegram());
+  const handleLoginByOtp = async () => {
+    const res: any = await apiGetV2('/ez/getlinklogin', null);
+    const { link } = res.data.data;
+
+    //fix working in safari
+    setTimeout(() => {
+      window.open(link, '_blank');
+    });
   };
   return (
     <>
       <Helmet>
-        <title>LoginPage</title>
+        <title>Easy Invest</title>
+        <link rel="icon" href={`${images.logoEasyInvest3}`} />
         <meta name="description" content="A Boilerplate application homepage" />
       </Helmet>
       <LoginLayout>

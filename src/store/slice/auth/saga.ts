@@ -13,6 +13,10 @@ import { coinActions } from '../coin';
 import { projectActions } from '../project';
 import { stakeActions } from '../stake';
 import { walletActions } from '../wallet';
+import { profileActions } from '../profile';
+import { transactionActions } from '../transaction';
+import { p2pActions } from '../p2p';
+import { rechargeActions } from '../recharge';
 
 export function* handleGetOtp(action) {
   try {
@@ -36,7 +40,10 @@ export function* handleLoginByTelegram() {
     const header = {};
     const res = yield call(apiGet, '/ez/getlinklogin', header);
     const { link } = res.data;
-    window.open(link, '_blank');
+
+    setTimeout(() => {
+      window.open(link, '_blank');
+    });
   } catch {}
 }
 
@@ -49,8 +56,8 @@ export function* loginDirectlyByTelegram(action: PayloadAction<{ id: string; tok
   const body = action.payload;
 
   const data = yield call(apiPost, url, body, null);
+  const next = sessionStorage.getItem('next');
 
-  console.log(data);
   if (data.error === RESPONSE_SUCCESS_ERROR) {
     yield put(
       authActions.loginByOtp({
@@ -61,6 +68,11 @@ export function* loginDirectlyByTelegram(action: PayloadAction<{ id: string; tok
         refreshToken_time: data.data.token_exp_time,
       }),
     );
+
+    if (next) {
+      History.push(`/projects/${Number(next)}?target=information`);
+    }
+    sessionStorage.removeItem('next');
   }
   yield put(authActions.setResponseUser({ error: data.error, message: data.message }));
 }
@@ -78,6 +90,8 @@ export function* handleLoginByOtp(action) {
     };
     const res = yield call(apiPost, `/ez/loginbyotp?device_id=${deviceId}&session_info=${sessionInfo}`, body, header);
     const { error, data, message } = res;
+    const next = sessionStorage.getItem('next');
+
     if (error === 0) {
       yield put(
         authActions.loginByOtp({
@@ -88,9 +102,14 @@ export function* handleLoginByOtp(action) {
           refreshToken_time: data.token_exp_time,
         }),
       );
-      yield History.push('/home');
+
+      if (next) {
+        yield History.push(`/projects/${Number(next)}?target=information`);
+      } else {
+        yield History.push('/home');
+      }
+      sessionStorage.removeItem('next');
     } else {
-      console.log('fail');
       yield put(
         authActions.loginByOtpFail({
           login: {
@@ -115,7 +134,7 @@ export function* handleLogout() {
         token: token,
       },
     );
-    console.log(res);
+
     const { error } = res;
     if (error === 0) {
       yield put(authActions.logoutSuccess());
@@ -123,6 +142,11 @@ export function* handleLogout() {
       yield put(projectActions.resetAllFieldProject()); // reset all field project
       yield put(stakeActions.resetAllFieldOfStake()); // reset all field stake
       yield put(walletActions.resetAllFieldOfWallet()); // reset all field wallet
+
+      yield put(rechargeActions.resetAllFieldRecharge());
+      yield put(profileActions.resetAllFieldOfProfile());
+      yield put(transactionActions.resetAllFieldOfTransaction());
+      yield put(p2pActions.resetAllFieldOfP2P());
 
       yield History.push('/');
     } else if (error === 2) {

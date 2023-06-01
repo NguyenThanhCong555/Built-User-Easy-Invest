@@ -9,16 +9,17 @@ import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 import { useNavigate } from 'react-router-dom';
 
 interface InPropsStyle {
-  laberHeader?: string | number;
+  laberHeader?: any;
   children?: any;
-  backRole?: string;
+  backRole?: any;
+  headerRight?: any;
 }
 export const NavContainer = (props: InPropsStyle) => {
   const { classes: c } = createStyleProps({});
   const nav = useNavigate();
 
   const backPage = () => {
-    nav(`${props.backRole}`);
+    nav(props.backRole);
   };
 
   return (
@@ -30,7 +31,7 @@ export const NavContainer = (props: InPropsStyle) => {
         <Flex className="laberHeader">
           <Text className="textLaberHeader">{props.laberHeader}</Text>
         </Flex>
-        <Flex className="iconRight"></Flex>
+        <Flex className="iconRight">{props.headerRight}</Flex>
       </Flex>
       <Flex className={c.contentHeader}>
         <Flex className="Content">{props.children}</Flex>
@@ -80,6 +81,7 @@ const createStyleProps = createStyles((theme, params: InPropsStyle) => ({
         marginLeft: '14px',
         justifyContent: 'center',
         alignItems: 'center',
+        [`${media.small()}`]: { '&': { marginLeft: '0px' } },
       },
       '.laberHeader': {
         maxWidth: '100%',
@@ -100,6 +102,7 @@ const createStyleProps = createStyles((theme, params: InPropsStyle) => ({
         height: '100%',
         background: 'transparent',
         marginRight: '14px',
+        [`${media.small()}`]: { '&': { marginRight: '0px !important' } },
       },
     },
   },

@@ -83,104 +83,154 @@ export const GlobalStyle = createGlobalStyle`
 
   /*text style*/ 
 .heading_1-bold {
+  font-family: 'Sarabun Bold';
   font-size: 64px;
   font-weight: 700;
+  line-height: 83px;
 }
 .heading_2-regular {
+  font-family: 'Sarabun';
   font-size: 64px;
   font-weight: 400;
+  line-height: 83px;
 }
 .heading_3-bold {
+  font-family: 'Sarabun Bold';
   font-size: 48px;
   font-weight: 700;
+  line-height: 62px;
 }
 .heading_4-medium {
+  font-family: 'Sarabun Medium';
   font-size: 48px;
   font-weight: 500;
+  line-height: 62px;
 }
 .heading_5-regular {
+  font-family: 'Sarabun';
   font-size: 48px;
   font-weight: 400;
+  line-height: 62px;
 }
 .title_1-bold {
+  font-family: 'Sarabun Bold';
   font-size: 32px;
   font-weight: 700;
+  line-height: 42px;
 }
 .title_2-medium {
+  font-family: 'Sarabun Medium';
   font-size: 32px;
   font-weight: 500;
+  line-height: 42px;
 }
 .title_3-regular {
+  font-family: 'Sarabun';
   font-size: 32px;
   font-weight: 400;
+  line-height: 42px;
 }
 .subtitle_1-bold {
+  font-family: 'Sarabun Bold';
   font-size: 24px;
   font-weight: 700;
+  line-height: 31px;
 }
 .subtitle_2-medium {
+  font-family: 'Sarabun Medium';
   font-size: 24px;
   font-weight: 500;
+  line-height: 31px;
 }
 .subtitle_3-regular {
+  font-family: 'Sarabun';
   font-size: 24px;
   font-weight: 400;
+  line-height: 31px;
 }
 .subtitle_4-bold {
+  font-family: 'Sarabun Bold';
   font-size: 20px;
   font-weight: 700;
+  line-height: 26px;
 }
 .body_1-bold {
+  font-family: 'Sarabun Bold';
   font-size: 18px;
   font-weight: 700;
+  line-height: 23px;
 }
 .body_2-medium {
+  font-family: 'Sarabun Medium';
   font-size: 18px;
   font-weight: 500;
+  line-height: 23px;
 }
 .body_3-regular {
+  font-family: 'Sarabun';
   font-size: 18px;
   font-weight: 400;
+  line-height: 23px;
 }
 .body_4-bold {
+  font-family: 'Sarabun Bold';
   font-size: 16px;
   font-weight: 700;
+  line-height: 21px;
 }
 .body_5-medium {
+  font-family: 'Sarabun Medium';
   font-size: 16px;
   font-weight: 500;
+  line-height: 21px;
 }
 .body_6-regular {
+  font-family: 'Sarabun';
   font-size: 16px;
   font-weight: 400;
+  line-height: 21px;
 }
 .small_1-bold {
+  font-family: 'Sarabun Bold';
   font-size: 14px;
   font-weight: 700;
+  line-height: 18px;
 }
 .small_2-medium {
+  font-family: 'Sarabun Medium';
   font-size: 14px;
   font-weight: 500;
+  line-height: 18px;
 }
 .small_3-regular {
+  font-family: 'Sarabun';
   font-size: 14px;
   font-weight: 400;
+  line-height: 18px;
 }
 .small_4-bold {
+  font-family: 'Sarabun Bold';
   font-size: 12px;
   font-weight: 700;
+  line-height: 16px;
 }
 .small_5-medium {
+  font-family: 'Sarabun Medium';
   font-size: 12px;
   font-weight: 500;
+  line-height: 16px;
 }
 .small_6-regular {
+  font-family: 'Sarabun';
   font-size: 12px;
   font-weight: 400;
+  line-height: 16px;
 }
 .small_7-regular {
+  font-family: 'Sarabun';
   font-size: 10px;
   font-weight: 400;
+  line-height: 13px;
 }
 
 

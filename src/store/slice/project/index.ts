@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'redux-injectors';
 
-import { Project, projectDetail } from './types';
+import { DataProject, Project, projectDetail } from './types';
 import { projectSaga } from './saga';
-import { SimpleProjectResponse } from './response';
+import { INITIAL_VALUE } from 'constants/common';
 
 export const initialState: Project = {
   projects: [],
@@ -17,7 +17,7 @@ export const initialState: Project = {
     loading: false,
     loadingProjectDetail: false,
 
-    error: -1,
+    error: INITIAL_VALUE,
     message: '',
   },
 };
@@ -42,6 +42,7 @@ const slice = createSlice({
     resetLoadingProjectDetail(state: Project) {
       state.response.loadingProjectDetail = false;
     },
+
     resetAllFieldProject(state: Project) {
       state.projects = [];
       state.calledFirstProjects = false;
@@ -50,7 +51,7 @@ const slice = createSlice({
       state.response = {
         loading: false,
         loadingProjectDetail: false,
-        error: -1,
+        error: INITIAL_VALUE,
         message: '',
       };
     },
@@ -59,7 +60,7 @@ const slice = createSlice({
       state.response = {
         loading: false,
         loadingProjectDetail: false,
-        error: -1,
+        error: INITIAL_VALUE,
         message: '',
       };
     },
@@ -71,7 +72,7 @@ const slice = createSlice({
     requestGetAllProjects(state: Project) {
       state.response.loading = true;
     },
-    responseGetAllProjects(state: Project, action: PayloadAction<SimpleProjectResponse[]>) {
+    responseGetAllProjects(state: Project, action: PayloadAction<DataProject[]>) {
       state.projects = action.payload;
     },
 

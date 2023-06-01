@@ -1,4 +1,5 @@
 export type coinInfo = {
+  id: number;
   project_id: number;
   coin_name: string;
   coin_avatar: string;

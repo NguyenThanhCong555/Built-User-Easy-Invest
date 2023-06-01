@@ -11,29 +11,25 @@ import 'dayjs/locale/en';
 import { getDateAfter } from 'utils/helpers/getDateAfter';
 import { boxContent } from '../data/data';
 import { useFilterWallet } from './FilterContext/FilterProvider';
+import { useTranslation } from 'react-i18next';
 
 interface ContentFilterWalletProps {}
 
 const ContentFilterWallet = ({}: ContentFilterWalletProps) => {
   const mobile: boolean = useMediaQuery('(max-width: 768px)');
   const { classes } = makeStyles({ mobile });
-
-  const { filter, setFilter, active, setActive, handleFilter } = useFilterWallet();
-
+  const { t } = useTranslation();
+  const { filter, setFilter, active, setActive, setRefresh, setIsFilter, handleFilter, closeFilter, handleRefresh } =
+    useFilterWallet();
   function handleSelectActive(item) {
     setActive(item.id);
-    const date = getDateAfter(new Date(), item.type, item.time);
-    setFilter({ start: date, end: new Date() });
-  }
-
-  function handleRefresh() {
-    setActive(1);
-    setFilter({ start: getDateAfter(new Date(), 0, -1), end: new Date() });
+    const date = getDateAfter(new Date(new Date().setHours(0, 0, 0, 0)), item.type, item.time);
+    setFilter({ start: date, end: new Date(new Date().setHours(23, 59, 59, 999)) });
   }
 
   return (
     <Stack className={classes.stack}>
-      <Text className={classes.timeTitle}>Thời gian</Text>
+      <Text className={classes.timeTitle}>{t('wallet.Time')}</Text>
       <Flex className={classes.flexTime}>
         <DateInput
           value={filter.start}
@@ -47,9 +43,11 @@ const ContentFilterWallet = ({}: ContentFilterWalletProps) => {
           }}
           onChange={value => {
             setFilter({ start: value as Date, end: filter.end });
+            setActive(0);
           }}
+          maxDate={filter.end}
         />
-        <Text className={classes.toTitle}>đến</Text>
+        <Text className={classes.toTitle}>{t('wallet.arrive')}</Text>
         <DateInput
           value={filter.end}
           valueFormat="DD/MM/YYYY"
@@ -59,6 +57,11 @@ const ContentFilterWallet = ({}: ContentFilterWalletProps) => {
             const date = value.split('/');
             const newDate = new Date(Number(date[2]), Number(date[1]) - 1, Number(date[0]));
             return newDate;
+          }}
+          minDate={filter.start}
+          onChange={value => {
+            setFilter({ start: filter.start, end: value as Date });
+            setActive(0);
           }}
         />
       </Flex>
@@ -74,7 +77,7 @@ const ContentFilterWallet = ({}: ContentFilterWalletProps) => {
               color: active == index + 1 ? variable.neutral.black : variable.neutral.greyDark,
             }}
           >
-            {item.name}
+            <Text className={classes.boxText}>{t(`filter.${item.name}`)}</Text>
           </Box>
         ))}
       </Flex>
@@ -91,7 +94,7 @@ const ContentFilterWallet = ({}: ContentFilterWalletProps) => {
           variant="outline"
           onClick={handleRefresh}
         >
-          Làm mới
+          {t('wallet.Refresh')}
         </MyButton>
         <MyButton
           h={47}
@@ -100,7 +103,7 @@ const ContentFilterWallet = ({}: ContentFilterWalletProps) => {
           }}
           onClick={handleFilter}
         >
-          Lọc ngay
+          {t('wallet.Filter immediately')}
         </MyButton>
       </Flex>
     </Stack>
@@ -173,6 +176,10 @@ const makeStyles = createStyles((theme, { mobile }: { mobile: boolean }) => ({
     minWidth: 76,
     cursor: 'pointer',
     flex: !mobile ? 1 : 0,
+  },
+
+  boxText: {
+    fontSize: 14,
   },
 }));
 

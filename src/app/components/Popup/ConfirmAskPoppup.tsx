@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { Box, Group, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,8 @@ import { variable } from 'styles/variable';
 import { ReactComponent as IconXCircle } from 'assets/icons/x-circle.svg';
 
 type Props = {
-  title: string;
+  title?: string;
+  content?: ReactNode;
   cancelText: string;
   successText: string;
   onClose?: () => void;
@@ -25,8 +26,8 @@ export const ConfirmAskPopup = (props: Props) => {
       <Group position="right" mb={12}>
         <IconXCircle onClick={props.onClose} style={{ cursor: 'pointer' }} />
       </Group>
-
-      <Text align="center">{props.title}</Text>
+      {props.title && <Text align="center">{props.title}</Text>}
+      {props.content && props.content}
 
       <Group noWrap mt={24}>
         <MyButton

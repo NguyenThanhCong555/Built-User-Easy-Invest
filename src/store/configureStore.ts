@@ -2,9 +2,21 @@ import createSagaMiddleware from 'redux-saga';
 import { configureStore } from '@reduxjs/toolkit';
 import rootSaga from './rootSaga';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, createTransform } from 'redux-persist';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+
 import storage from 'redux-persist/lib/storage';
 import { createReducer } from './reducers';
-import { coinTransform, projectTransform, stakeTransform } from './transform';
+import {
+  coinTransform,
+  profileTransform,
+  projectTransform,
+  rechargeTransform,
+  stakeTransform,
+  systemTransform,
+  transactionTransform,
+  walletTransform,
+  withdrawTransform,
+} from './transform';
 
 export function configureAppStore() {
   // const passwordTransform = createTransform(
@@ -16,11 +28,23 @@ export function configureAppStore() {
   //   },
   //   { whitelist: ['auth, filter', 'location'] },
   // );
-  const persistConfig = {
+  const persistConfig: any = {
     key: 'user',
     version: 1,
     storage: storage,
-    transforms: [projectTransform, stakeTransform, coinTransform],
+    // blacklist: ['stake', 'coin', 'project'], // navigation will not be persisted
+    transforms: [
+      projectTransform,
+      stakeTransform,
+      coinTransform,
+      walletTransform,
+      transactionTransform,
+      profileTransform,
+      rechargeTransform,
+      withdrawTransform,
+      systemTransform,
+    ],
+    stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
     migrate: state => {
       return Promise.resolve(state);
     },

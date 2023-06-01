@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,6 +25,7 @@ export const Telephone = () => {
   // State
   const [phone, setPhone] = useState<string>('');
   const [code, setCode] = useState<number>(84);
+  const getOTPRef = useRef<HTMLButtonElement>(null);
 
   // Function
   const handleGetOtp = () => {
@@ -36,8 +37,12 @@ export const Telephone = () => {
   }
 
   const handleOnKeyDown = e => {
-    if ([37, 38, 39, 40].indexOf(e.which) > -1) {
+    if ([37, 38, 39, 40, 69, 231, 190, 189].indexOf(e.which) > -1) {
       e.preventDefault();
+    }
+
+    if (e.keyCode === 13 && getOTPRef.current) {
+      getOTPRef.current.click();
     }
   };
   const handleFocus = () => {
@@ -53,6 +58,7 @@ export const Telephone = () => {
       }
     };
   }, []);
+
   return (
     <LoginLayout>
       <SubtleButton className={classes.backBtn} onClick={() => navigate('/')}>
@@ -70,11 +76,13 @@ export const Telephone = () => {
             onChange={handleChangePhone}
             onKeyDown={e => handleOnKeyDown(e)}
             onFocus={handleFocus}
+            inputMode="numeric"
+            pattern="[0-9]*"
             className={cx('body_2-medium', classes.input, login.error === 5 ? 'error' : '')}
             placeholder={t('Login.Enter your phone number')}
           />
         </Flex>
-        {login.error === 0 || login.error === 12 ? (
+        {login.error === 0 || login.error === 12 || login.error === 10 ? (
           <OtpInput phone={code + clearZeroNumber(phone)} onSendBack={handleGetOtp} />
         ) : (
           <>
@@ -86,7 +94,7 @@ export const Telephone = () => {
                 : ''}
             </Text>
             <Group className={classes.groupBtn}>
-              <FilledButton className={classes.getBtn} onClick={handleGetOtp}>
+              <FilledButton className={classes.getBtn} onClick={handleGetOtp} ref={getOTPRef}>
                 {t('Login.Get OTP code')}
               </FilledButton>
             </Group>

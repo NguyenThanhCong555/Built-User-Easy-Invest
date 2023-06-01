@@ -14,16 +14,12 @@ export function* FetchListCoins() {
 
     const res: AxiosResponse<responseAllCoins> = yield call(apiGetV2, url, null);
 
-    console.log(res.data);
-
     if (res.data.error === RESPONSE_SUCCESS_ERROR) {
       yield put(actions.responseWhenFetchListCoins(res.data.data.coins));
       yield put(actions.setCallListCoins());
-      yield put(actions.resetLoading());
-    } else yield put(actions.resetLoading());
-  } catch (error) {
-    console.log(error);
-  }
+    }
+    yield put(actions.resetLoading());
+  } catch (error) {}
 }
 
 export function* coinSaga() {

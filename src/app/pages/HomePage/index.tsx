@@ -15,6 +15,7 @@ import { authActions } from 'store/slice/auth';
 import { store } from 'store/configureStore';
 import { selectCalledFirstProjects, selectListProject, selectLoading } from 'store/slice/project/selector';
 import { projectActions } from 'store/slice/project';
+import { images } from 'assets/images';
 
 export function HomePage() {
   const { t } = useTranslation();
@@ -34,8 +35,9 @@ export function HomePage() {
   return (
     <>
       <Helmet>
-        <title>HomePage</title>
+        <title>Easy Invest</title>
         <meta name="description" content="A Boilerplate application homepage" />
+        <link rel="icon" href={`${images.logoEasyInvest3}`} />
       </Helmet>
       <Container fluid className={classes.container}>
         <Loading visible={loading} />

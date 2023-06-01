@@ -6,22 +6,28 @@ interface ModalSuccessProps {
   title: string;
   opened: boolean;
   setOpened: any;
+  onClose?: any;
 }
 
-const ModalSuccess = ({ title, opened, setOpened }: ModalSuccessProps) => {
+const ModalSuccess = ({ title, opened, setOpened, onClose }: ModalSuccessProps) => {
   const { classes } = makeStyles();
   return (
     <Modal
       centered
       opened={opened}
-      onClose={() => {}}
+      onClose={() => {
+        setOpened(false);
+        onClose?.();
+      }}
       closeButtonProps={{
         display: 'none',
       }}
     >
       <Stack className={classes.stack}>
         <IconSuccess />
-        <Text className={classes.title}>{title}</Text>
+        <Text ta={'center'} className={classes.title}>
+          {title}
+        </Text>
       </Stack>
     </Modal>
   );

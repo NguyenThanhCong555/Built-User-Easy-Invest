@@ -22,7 +22,7 @@ const makeStyles = createStyles(() => ({
   overlay: {
     width: '100vw',
     height: '100vh',
-    position: 'absolute',
+    position: 'fixed',
     inset: 0,
     zIndex: 99999,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',

@@ -1,16 +1,9 @@
 import { ErrorResponse } from 'utils/http/response';
-import { projectDetail } from './types';
-
-export interface SimpleProjectResponse {
-  id: number;
-  name: string;
-  avatar: string;
-  author: { name: string };
-}
+import { DataProject, projectDetail } from './types';
 
 export interface ListProjectResponse extends ErrorResponse {
   data?: {
-    projects: SimpleProjectResponse[];
+    projects: DataProject[];
   };
 }
 

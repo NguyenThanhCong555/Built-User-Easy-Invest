@@ -18,3 +18,16 @@ export const WalletCoinTransactionManagement = lazyLoad(
   () => import('./WalletCoinTransactionManagement'),
   module => module.WalletCoinTransactionManagement,
 );
+export const WalletCoinHistory = lazyLoad(
+  () => import('./WalletMainHistory'),
+  module => module.WalletMainHistory,
+);
+
+export const WalletTransactionDetail = lazyLoad(
+  () => import('./WalletTransactionDetail'),
+  module => module.WalletTransactionDetail,
+);
+export const WalletEndTransactionDetails = lazyLoad(
+  () => import('./components/TransactionDetails'),
+  module => module.TransactionDetails,
+);

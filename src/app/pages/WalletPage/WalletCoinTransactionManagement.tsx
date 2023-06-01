@@ -1,160 +1,248 @@
-import React, { useEffect, useState } from 'react';
-import { Flex, Loader, Stack, Text, createStyles } from '@mantine/core';
-import { useNavigate, useParams } from 'react-router-dom';
-import { TFilterDate } from './type';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { Center, Flex, Loader, Stack, Text, createStyles } from '@mantine/core';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { TCoinData } from './type';
 import { useMediaQuery } from '@mantine/hooks';
 import { variable } from 'styles/variable';
-import { getDateAfter } from 'utils/helpers/getDateAfter';
 
 import { ReactComponent as FilterIcon } from 'assets/icons/wallet/filter-funnel.svg';
 import WebFilterWallet from './components/WebFilterWallet';
 import MobileFilterWallet from './components/MobileFilterWallet';
 import { useDispatch, useSelector } from 'react-redux';
-// import { useWalletSlice, walletActions } from 'store/app/wallet';
-// import { selectResponseWallet, selectWalletTotalPage, selectWalletTransactions } from 'store/app/wallet/selector';
-// import { formatCurrency } from 'utils/formatCurrency';
-// import { convertDateTime } from 'utils/convertDateTime';
 
-// import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { RESPONSE_SUCCESS_ERROR } from 'constants/common';
 import { Frame } from 'app/layouts/Frame';
 import { renderTitleTransaction } from 'utils/helpers/renderTitleTransaction';
 import { convertDateTime } from 'utils/helpers/convertDateTime';
-import { formatCoinUS } from 'utils/helpers/formatCoinUs';
 import { walletActions } from 'store/slice/wallet';
-import { selectWalletTotalCoin, selectWalletTransactions } from 'store/slice/wallet/selectors';
-import FilterProvider, { useFilterWallet } from './components/FilterContext/FilterProvider';
+import {
+  selectCalledTransactions,
+  selectResponseWallet,
+  selectUserSeeAllCoinsInWallet,
+  selectWalletTotalCoin,
+  selectWalletTotalPage,
+  selectWalletTransactions,
+} from 'store/slice/wallet/selectors';
+import { useFilterWallet } from './components/FilterContext/FilterProvider';
+import Loading from 'app/components/Loading/Loading';
+import { numberWithCommas } from 'helpers/formatNumberWithCommas';
+import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet-async';
+import { images } from 'assets/images';
+
 export function WalletCoinTransactionManagement() {
+  const { t } = useTranslation();
   const { classes } = makeStyles();
   const navigate = useNavigate();
-  const [opened, setOpened] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
-
-  const { isFilter, openFilter } = useFilterWallet();
-
   const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [dataCoin, setDataCoin] = useState<TCoinData | null>(null);
+
+  const [fetchingAgain, setFetchingAgain] = useState<boolean>(false);
+
+  const { isFilter, openFilter, filter, refresh, setRefresh, filterAgain } = useFilterWallet();
   const { coinId } = useParams();
 
   const mobile = useMediaQuery('(max-width: 768px)');
-  const [filter, setFilter] = useState<TFilterDate>({ start: getDateAfter(new Date(), 0, -1), end: new Date() });
-  const [active, setActive] = useState(1);
 
+  const data = useSelector(selectUserSeeAllCoinsInWallet);
   const dataTransaction = useSelector(selectWalletTransactions);
-  const dataCoin = useSelector(selectWalletTotalCoin);
-  //   const totalPage = useSelector(selectWalletTotalPage);
-  //   const responseWallet = useSelector(selectResponseWallet);
+  const totalCoin = useSelector(selectWalletTotalCoin);
+  const totalPage = useSelector(selectWalletTotalPage);
+  const responseWallet = useSelector(selectResponseWallet);
+  const calledTransaction = useSelector(selectCalledTransactions);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+
+  useLayoutEffect(() => {
+    const coinData = data?.find((item, _) => item?.coin_id === Number(coinId));
     if (coinId) {
-      dispatch(walletActions.requestGetWalletTransactions({ coinId, page, count: 20 }));
-      // Fetching data coin again if coin_id not include
-      if (dataCoin?.coin_id !== Number(coinId)) {
-        dispatch(walletActions.requestGetTotalCoin({ coinId }));
+      setLoading(true);
+
+      if (!coinData) {
+        setFetchingAgain(true);
+        if (coinId) {
+          dispatch(walletActions.requestGetTotalCoin({ coinId }));
+        }
+      } else {
+        setDataCoin(coinData);
+      }
+
+      if (searchParams.get('start') === null || searchParams.get('end') === null) {
+        dispatch(walletActions.requestGetWalletTransactions({ coinId, page }));
       }
     }
+  }, [coinId, data]);
 
-    return () => {
-      // dispatch(walletActions.resetDataTransactions());
+  useLayoutEffect(() => {
+    if (isFilter) {
+      dispatch(walletActions.resetDataTransactions());
       dispatch(walletActions.resetResponse());
-      // dispatch(walletActions.resetTotalPage());
+      dispatch(walletActions.resetTotalPage());
+      dispatch(walletActions.resetCalledTransaction());
+      setPage(1);
+      setLoading(true);
+      setHasMore(true);
+      dispatch(
+        walletActions.requestFilterTransactions({
+          coinId,
+          page: 1,
+          begin_time: filter.start.getTime(),
+          end_time: filter.end.getTime(),
+        }),
+      );
+    }
+    if (refresh) {
+      dispatch(walletActions.resetDataTransactions());
+      dispatch(walletActions.resetResponse());
+      dispatch(walletActions.resetTotalPage());
+      dispatch(walletActions.resetCalledTransaction());
+      setPage(1);
+      setLoading(true);
+      setHasMore(true);
+      setRefresh(false);
+
+      dispatch(walletActions.requestGetWalletTransactions({ coinId, page: 1 }));
+    }
+  }, [isFilter, filterAgain, refresh]);
+
+  useLayoutEffect(() => {
+    return () => {
+      dispatch(walletActions.resetDataTransactions());
+      dispatch(walletActions.resetResponse());
+      dispatch(walletActions.resetTotalPage());
+      dispatch(walletActions.resetCalledTransaction());
     };
-  }, [coinId]);
+  }, []);
 
-  //   useEffect(() => {
-  //     if (dataTransaction.length === 0 && responseWallet.error === RESPONSE_SUCCESS_ERROR) {
-  //       setHasMore(false);
-  //     }
-  //   }, [responseWallet]);
+  useLayoutEffect(() => {
+    if (calledTransaction) {
+      setLoading(false);
+    }
+  }, [calledTransaction]);
 
-  //   function fetchMoreData() {
-  //     if (totalPage === page) {
-  //       setHasMore(false);
-  //     }
+  function fetchMoreData() {
+    if (totalPage === page) {
+      setHasMore(false);
+      return;
+    }
 
-  //     if (coinName) {
-  //       dispatch(walletActions.requestGetWalletTransactions({ coinName, page: page + 1, count: 20 }));
-  //       setPage(page + 1);
-  //     }
-  //   }
+    if (coinId) {
+      if (isFilter) {
+        dispatch(
+          walletActions.requestFilterTransactions({
+            coinId,
+            page: page + 1,
+            begin_time: filter.start.getTime(),
+            end_time: filter.end.getTime(),
+          }),
+        );
+      } else {
+        dispatch(walletActions.requestGetWalletTransactions({ coinId, page: page + 1 }));
+      }
+      setPage(page + 1);
+    }
+  }
 
   return (
-    <Frame
-      titlePage={dataCoin?.coin_name}
-      onMovePage={() => {
-        navigate('/wallet/coin/1');
-      }}
-      pb={40}
-      rightSection={<FilterIcon className={classes.icon} onClick={openFilter} />}
-    >
-      <Stack className={classes.stack}>
-        {dataTransaction?.map((item, _) => (
-          <Stack className={classes.stackTransaction} key={item?.id} onClick={() => navigate('/')}>
-            <Flex className={classes.flexTransaction}>
-              <Text className={classes.titleTransaction}>{renderTitleTransaction(item?.service)}</Text>
-              <Text
-                className={classes.numberTransaction}
-                color={item?.exchange > 0 ? variable.secondary.secondary1 : variable.neutral.black}
-              >
-                {item?.exchange}
-              </Text>
-            </Flex>
-            <Flex className={classes.flexTransaction}>
-              <Text className={classes.timeTransaction}>{convertDateTime(item?.create_time / 1000)} </Text>
-              <Text className={classes.surplusTransaction}>
-                Số dư: <span>{formatCoinUS(item?.balance)}</span>
-              </Text>
-            </Flex>
-          </Stack>
-        ))}
-        {/* <InfiniteScroll
-            dataLength={dataTransaction.length}
-            next={fetchMoreData}
-            hasMore={hasMore}
-            loader={
-              <Center mt={10}>
-                <Loader size="sm" color={variable.primary.primary2} />
+    <>
+      <Helmet>
+        <title>
+          {t('wallet.Manage transactions history/coin')} - {`${fetchingAgain ? totalCoin?.coin_name : dataCoin?.coin_name}`}
+        </title>
+        <meta name="description" content="A Boilerplate application homepage" />
+        <link rel="icon" href={`${images.logoEasyInvest3}`} />
+      </Helmet>
+      <Loading visible={loading} />
+      <Frame
+        titlePage={fetchingAgain ? totalCoin?.coin_name : dataCoin?.coin_name}
+        onMovePage={() => {
+          navigate(`/wallet/coin/${coinId}`);
+        }}
+        pb={10}
+        rightSection={<FilterIcon className={classes.icon} onClick={openFilter} />}
+      >
+        <Stack className={classes.stack}>
+          {responseWallet.error === RESPONSE_SUCCESS_ERROR &&
+            (dataTransaction.length === 0 ? (
+              <Center>
+                <Text>
+                  {isFilter
+                    ? t('wallet.No matching transaction history results !')
+                    : t('wallet.You have no transaction with this coin !')}
+                </Text>
               </Center>
-            }
-          >
-            {responseWallet.error === RESPONSE_SUCCESS_ERROR &&
-              (dataTransaction.length === 0 ? (
-                <Text>Chưa có giao dịch nào !</Text>
-              ) : (
-                dataTransaction?.map((item, _) => (
-                  <Stack className={classes.stackTransaction} key={item?.id} onClick={() => navigate('/')}>
+            ) : (
+              <InfiniteScroll
+                dataLength={dataTransaction.length}
+                next={fetchMoreData}
+                hasMore={hasMore}
+                height="calc(100vh - 186.5px)"
+                scrollThreshold="700px"
+                loader={
+                  <Center className={classes.centerLoading}>
+                    <Loader size="sm" color={variable.primary.primary2} />
+                  </Center>
+                }
+                endMessage={
+                  <Center className={classes.centerOver}>
+                    <Text>{t('wallet.The transaction is over !')}</Text>
+                  </Center>
+                }
+              >
+                {dataTransaction?.map((item, _) => (
+                  <Stack
+                    className={classes.stackTransaction}
+                    key={item?.id}
+                    onClick={() =>
+                      navigate(`/wallet/transaction/detail/${item?.id}`, {
+                        state: location?.search,
+                      })
+                    }
+                  >
                     <Flex className={classes.flexTransaction}>
-                      <Text className={classes.titleTransaction}>{renderTitleTransaction(item?.service)}</Text>
+                      <Text className={classes.titleTransaction}>
+                        {t(
+                          'wallet.' +
+                            renderTitleTransaction(item?.service, item?.exchange, item?.coin_name === 'USDT' ? true : false),
+                        )}
+                      </Text>
                       <Text
                         className={classes.numberTransaction}
                         color={item?.exchange > 0 ? variable.secondary.secondary1 : variable.neutral.black}
                       >
-                        {item?.exchange}
+                        {item?.exchange > 0 && '+'} {numberWithCommas(item?.exchange, 8)}
                       </Text>
                     </Flex>
                     <Flex className={classes.flexTransaction}>
                       <Text className={classes.timeTransaction}>{convertDateTime(item?.create_time / 1000)} </Text>
                       <Text className={classes.surplusTransaction}>
-                        Số dư: <span>{formatCurrency(item?.balance)}</span>
+                        {t('wallet.history.Surplus')} <span>{numberWithCommas(item?.balance, 8)}</span>
                       </Text>
                     </Flex>
                   </Stack>
-                ))
-              ))}
-          </InfiniteScroll> */}
-        {/* Transactions */}
-      </Stack>
+                ))}
+              </InfiniteScroll>
+            ))}
+          {/* Transactions */}
+        </Stack>
 
-      {mobile ? <MobileFilterWallet /> : <WebFilterWallet />}
-    </Frame>
+        {mobile ? <MobileFilterWallet /> : <WebFilterWallet />}
+      </Frame>
+    </>
   );
 }
 
 const makeStyles = createStyles(() => ({
   stack: {
-    padding: '20px 30px',
+    height: 'calc(100vh - 166.5px)',
+    padding: '20px 30px 0 30px',
     '@media (max-width: 768px)': {
-      padding: 16,
+      padding: '16px 16px 0 16px',
     },
   },
 
@@ -163,6 +251,10 @@ const makeStyles = createStyles(() => ({
     borderBottom: ' 1px solid #EAEAEA',
     paddingBottom: 9,
     cursor: 'pointer',
+
+    ':not(:first-of-type)': {
+      marginTop: 12,
+    },
   },
 
   titleTransaction: {
@@ -172,6 +264,9 @@ const makeStyles = createStyles(() => ({
   numberTransaction: {
     fontSize: 16,
     fontWeight: 700,
+    wordBreak: 'break-all',
+    marginLeft: 60,
+    textAlign: 'end',
   },
   timeTransaction: {
     fontSize: 12,
@@ -181,6 +276,9 @@ const makeStyles = createStyles(() => ({
     fontSize: 12,
     fontWeight: 500,
     color: variable.neutral.grey,
+    wordBreak: 'break-all',
+    marginLeft: 60,
+    textAlign: 'end',
     span: {
       color: variable.neutral.black,
     },
@@ -192,5 +290,20 @@ const makeStyles = createStyles(() => ({
 
   icon: {
     cursor: 'pointer',
+  },
+
+  centerLoading: {
+    marginTop: 10,
+
+    '@media (max-width : 768px)': {
+      marginBottom: 10,
+    },
+  },
+  centerOver: {
+    marginTop: 20,
+
+    '@media (max-width : 768px)': {
+      marginBottom: 20,
+    },
   },
 }));

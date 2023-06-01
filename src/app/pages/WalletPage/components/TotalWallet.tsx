@@ -14,38 +14,47 @@ import { ReactComponent as History } from 'assets/icons/history.svg';
 import { ReactComponent as ConvertCard } from 'assets/icons/wallet/convert-card.svg';
 import { TButtonWallet } from '../type';
 import { useParams } from 'react-router-dom';
+import { walletActions } from 'store/slice/wallet';
+import { useTranslation } from 'react-i18next';
 
-const TotalWallet = () => {
+export interface IpropsData {
+  data: any;
+}
+
+const TotalWallet = (props: IpropsData) => {
   const { classes } = makeStyles();
-  const mainUSDT = 'USDT';
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-
   const dataBtn: TButtonWallet[] = [
     {
       id: 1,
       icon: <MoneyReceive />,
-      title: 'Nạp tiền',
-      path: '/wallet/*',
+      title: t('wallet.Recharge'),
+      path: '/recharge',
     },
     {
       id: 2,
       icon: <ConvertCard />,
-      title: 'Chuyển tiền',
-      path: '/wallet/*',
+      title: t('wallet.Transfer money'),
+      path: '/transfer/transfer-by-phone',
     },
     {
       id: 3,
       icon: <MoneySend />,
-      title: 'Rút tiền',
-      path: '/wallet/*',
+      title: t('wallet.Withdraw money'),
+      path: '/withdraw',
     },
     {
       id: 4,
       icon: <History />,
-      title: 'Lịch sử',
-      path: '/wallet/walletdetail',
+      title: t('wallet.History'),
+      path: `/wallet/history`,
     },
   ];
+  const resData = props?.data?.filter((value, index) => {
+    return value?.coin_name === 'USDT';
+  });
+
   return (
     <Stack className={classes.stack}>
       <Flex className={classes.flex}>
@@ -53,7 +62,7 @@ const TotalWallet = () => {
           <Image src={coinUSDT} mr={4} />
           <Text className={classes.title}>&nbsp;USDT</Text>
         </Flex>
-        <Text className={classes.title2}> {formatCurrency(800000)}</Text>
+        <Text className={classes.title2}> {formatCurrency(resData[0]?.balance ?? 0)}</Text>
       </Flex>
 
       <ButtonsWallet data={dataBtn} />

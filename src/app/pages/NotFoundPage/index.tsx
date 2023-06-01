@@ -2,12 +2,15 @@ import * as React from 'react';
 import styled from 'styled-components/macro';
 import { P } from './P';
 import { Helmet } from 'react-helmet-async';
+import { images } from 'assets/images';
 
 export function NotFoundPage() {
   return (
     <>
       <Helmet>
-        <title>404 Page Not Found</title>
+        <title>Easy Invest</title>
+
+        <link rel="icon" href={`${images.logoEasyInvest3}`} />
         <meta name="description" content="Page not found" />
       </Helmet>
       <Wrapper>

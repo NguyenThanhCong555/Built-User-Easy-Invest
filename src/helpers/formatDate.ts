@@ -1,4 +1,10 @@
 class _ConvertDate {
+  convertDateToMilliseconds(date: Date) {
+    return Math.floor(date.getTime());
+  }
+  convertDateToSeconds(date: Date) {
+    return Math.floor(date.getTime() / 1000.0);
+  }
   // convert unix timestamp to milliseconds
   convertMilliseconds(ts) {
     return ts * 1000;

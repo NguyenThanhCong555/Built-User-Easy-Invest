@@ -3,9 +3,13 @@ export interface DataProject {
   name: string;
   avatar: string;
   author: { name: string };
+  coin_id: number;
+  coin_name: string;
+  coin_avatar: string;
 }
 
 export type TCoinInfo = {
+  id: string;
   coin_name: string;
   coin_avatar: string;
   rate_usdt_coin: number;
@@ -21,6 +25,7 @@ export interface projectDetail {
   intro: { ENG: string; VN: string };
   website: string;
   coin_info: TCoinInfo;
+  state: number;
 }
 
 export interface Project {

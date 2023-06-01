@@ -1,7 +1,7 @@
-import { SECONDS_PER_DAY } from 'constants/common';
+import { MILLISECONDS, SECONDS_PER_DAY } from 'constants/common';
 import { convertSeconds } from 'helpers/convertDay';
 import { projectDetail } from 'store/slice/project/types';
-import { IListStake, SimpleStake, TBoughtStakeIteam, TStakeBought, TStakingBook } from 'store/slice/stake/types';
+import { IListStake, SimpleStake, TBoughtStakeItem, TStakeBought, TStakingBook } from 'store/slice/stake/types';
 import { isArray } from 'util';
 
 export const handleGetProjectDetail = (dataProjectDetail: projectDetail[], projectId: number): projectDetail | undefined => {
@@ -53,22 +53,47 @@ export const GetListAPROfStake = (listStakes: SimpleStake[] | undefined): { id: 
   });
 };
 
-export const filterBookStake = (data: TStakingBook[], state: 0 | 1) => {
+export const filterBookStake = (
+  data: TStakingBook[],
+  byCoinName: string,
+  byDateTo: number,
+  byDateFrom: number,
+  state: 0 | 1 | -1,
+) => {
   if (data.length === 0) return [];
 
+  const TEXT_EMPTY = '';
+  const STATE_ALL = -1;
   return data.filter(stakeBook => {
-    if (stakeBook.auto === state) return stakeBook;
+    if (stakeBook?.time_start <= byDateFrom && stakeBook?.time_start >= byDateTo)
+      if (stakeBook?.coin_info?.coin_name === byCoinName || byCoinName === TEXT_EMPTY)
+        if (stakeBook.auto === state || state === STATE_ALL) return stakeBook;
   });
 };
 
-export const getSimpleBoughtStakeInfor = (data: TBoughtStakeIteam[], stakingId: number): TStakeBought | undefined => {
+export const getSimpleBoughtStakeInfor = (data: TStakeBought[], stakingId: number): TStakeBought | undefined => {
   for (let boughtStake of data) {
-    if (boughtStake.stakingId === stakingId) return boughtStake.stakeInfor;
+    if (boughtStake.id === stakingId) return boughtStake;
   }
   return undefined;
 };
 
-export const GetProfitAfterTerm = (coin: number, rate: number, timeframe: number): number => {
+export const getDetailStake = (data: TStakingBook[], stakingId: number): TStakingBook | undefined => {
+  for (let stake of data) {
+    if (stake.id === stakingId) return stake;
+  }
+  return undefined;
+};
+
+export const GetProfitAfterTerm = (coin: number, rateARP: number, timeStakeMilliseconds: number): number => {
+  const percent = 100;
+  const DayPerYear = 365;
+
+  // return (((coin * rate) / percent) * timeframe) / (DayPerYear * SECONDS_PER_DAY);
+  return (((coin * rateARP) / percent / 365) * timeStakeMilliseconds) / SECONDS_PER_DAY / MILLISECONDS;
+};
+
+export const GetProfitAfterTermCurrent = (coin: number, rate: number, timeframe: number): number => {
   const percent = 100;
   const DayPerYear = 365;
 
@@ -98,3 +123,13 @@ export function formatCurrency(value) {
   if (value === 0) return value;
   return value?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).slice(0, -1);
 }
+
+export const handleCalculateAccumulatedCoins = (coins: number, interestRate: number, timeStart: number) => {
+  const percent = 100;
+  const DayPerYear = 365;
+
+  const profitPerDay = (coins * (interestRate / percent)) / DayPerYear;
+  const stakedDay = (Math.floor(new Date().getTime()) - timeStart) / SECONDS_PER_DAY / MILLISECONDS;
+
+  return stakedDay * profitPerDay;
+};

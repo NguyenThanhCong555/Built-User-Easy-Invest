@@ -1,17 +1,23 @@
-export const renderTitleTransaction = (service: number): string => {
+export const renderTitleTransaction = (service: number, exchange = 0, isUSDT): string => {
   switch (service) {
     case 1:
-      return 'Nạp tiền';
+      return 'Recharge';
     case 2:
-      return 'Rút tiền';
+      return 'Withdraw money';
     case 3:
-      return 'Nhận tiền';
+      return 'Receive money';
     case 4:
-      return 'Chuyển tiền';
+      return 'Transfer money';
     case 5:
       return 'Staking';
     case 6:
-      return 'Máy đào xu';
+      if (!isUSDT) {
+        if (exchange > 0) return 'Buy';
+        return 'Sell';
+      } else {
+        if (exchange < 0) return 'Buy';
+        return 'Sell';
+      }
     default:
       return 'Giao dịch';
   }

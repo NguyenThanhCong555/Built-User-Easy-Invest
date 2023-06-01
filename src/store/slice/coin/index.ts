@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Coin, coinInfo } from './types';
+import { INITIAL_VALUE } from 'constants/common';
 
 export const initialState: Coin = {
   listCoins: [],
@@ -8,7 +9,7 @@ export const initialState: Coin = {
 
   response: {
     loading: false,
-    error: -1,
+    error: INITIAL_VALUE,
     message: '',
   },
 };
@@ -28,7 +29,7 @@ const slice = createSlice({
     resetAllFieldProject(state: Coin) {
       state.response = {
         loading: false,
-        error: -1,
+        error: INITIAL_VALUE,
         message: '',
       };
     },
@@ -39,7 +40,7 @@ const slice = createSlice({
 
       state.response = {
         loading: false,
-        error: -1,
+        error: INITIAL_VALUE,
         message: '',
       };
     },

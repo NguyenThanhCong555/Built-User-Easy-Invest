@@ -9,6 +9,6 @@ export const selectListCoins = createSelector([selectDomain], coin => coin.listC
 export const selectCallListCoin = createSelector([selectDomain], coin => coin.callListCoins);
 
 // response
-export const selectLoading = createSelector([selectDomain], coin => coin.response.loading);
+export const selectLoadingCoin = createSelector([selectDomain], coin => coin.response.loading);
 
 export const selectError = createSelector([selectDomain], coin => coin.response.error);

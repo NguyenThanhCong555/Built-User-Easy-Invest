@@ -5,39 +5,54 @@ import { Group, Text } from '@mantine/core';
 
 type Props = {
   mark?: boolean;
-  label: string;
+  label: any;
   value: any;
   unitValue?: React.ReactNode;
   spacingUnit?: number;
+  classValue?: string;
 
   mt?: string | number;
   mb?: string | number;
   my?: string | number;
   px?: string | number;
   colorValue?: string;
+  maw_label?: string | number;
 };
 
 export const Accumulation = (props: Props) => {
   return (
-    <Group position="apart" w={'100%'} mt={props.mt} mb={props.mb} my={props.my}>
+    <Group position="apart" spacing={10} noWrap w={'100%'} mt={props.mt} mb={props.mb} my={props.my}>
       {props.mark ? (
-        <Group spacing={6}>
-          <IconMark /> <Text className="small-2_medium">{props.label}</Text>
+        <Group spacing={6} noWrap>
+          <IconMark
+            style={{
+              flexShrink: 0,
+            }}
+          />
+          <Text fz={16} maw={props?.maw_label} className="small_2-medium">
+            {props.label}
+          </Text>
         </Group>
       ) : (
-        <Text className="small-2_medium">{props.label}</Text>
+        <Text maw={props?.maw_label} fw={700} className="small_2-medium">
+          {props.label}
+        </Text>
       )}
 
       {props.unitValue ? (
         <Group spacing={props.spacingUnit === 0 ? props.spacingUnit : 6}>
-          <Text className="small-2_medium" c={props.colorValue}>
+          <Text fz={16} fw={700} className={props.classValue ? `${props.classValue}` : 'small_2-medium'} c={props.colorValue}>
             {' '}
-            {props.value}
+            {props.value} {props.unitValue}
           </Text>
-          {props.unitValue}
         </Group>
       ) : (
-        <Text className="small-2_medium" c={props.colorValue}>
+        <Text
+          fz={16}
+          fw={700}
+          className={props.classValue ? `small_2-medium ${props.classValue}` : 'small_2-medium'}
+          c={props.colorValue}
+        >
           {props.value}
         </Text>
       )}

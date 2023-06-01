@@ -18,3 +18,10 @@ export enum EResponseTransactions {
   Receive = 'receive',
   Transfer = 'transfer',
 }
+
+export type TCoinData = {
+  userId: number;
+  coin_id: number;
+  coin_name: string;
+  balance: number;
+};

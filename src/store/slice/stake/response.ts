@@ -38,6 +38,17 @@ export interface StakingBookResponse extends ErrorResponse {
   };
 }
 
+export interface FilterStakingResponse extends ErrorResponse {
+  data: {
+    staking: TStakingBook[];
+    total_page: number;
+  };
+}
+
+export interface TotalUsdtStakeResponse extends ErrorResponse {
+  data: { total_usdt_staking: number };
+}
+
 export interface BoughtStakeInforResponse extends ErrorResponse {
   data: TStakeBought;
 }
